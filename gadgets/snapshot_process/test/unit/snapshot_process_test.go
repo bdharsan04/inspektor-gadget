@@ -40,6 +40,7 @@ type testDef struct {
 }
 
 func TestSnapshotProcessGadget(t *testing.T) {
+	gadgettesting.MinimumKernelVersion(t, "5.8")
 	gadgettesting.InitUnitTest(t)
 	runnerConfig := &utilstest.RunnerConfig{}
 	testCases := map[string]testDef{
