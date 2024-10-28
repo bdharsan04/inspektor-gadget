@@ -7,8 +7,8 @@
 
 #include <gadget/buffer.h>
 #include <gadget/common.h>
+#include <gadget/filter.h>
 #include <gadget/macros.h>
-#include <gadget/mntns_filter.h>
 
 /* Since LSM hooks may change with different kernel versions, here we only list the common ones.
  * TODO: Implement best-effort mechanism and add the remaining ones,
@@ -196,7 +196,7 @@ FOR_EACH_LSM_HOOK(DECLARE_LSM_PARAMETER)
 		if (!trace_##name && !trace_all)                           \
 			return 0;                                          \
                                                                            \
-		if (gadget_should_discard_mntns_id(gadget_get_mntns_id())) \
+		if (gadget_should_discard_event())                         \
 			return 0;                                          \
                                                                            \
 		gadget_process_populate(&event.proc);                      \
