@@ -272,6 +272,7 @@ Return value:
 #### `dataArrayGet(d uint32, index uint32) uint32`
 
 Get the element at the given index.
+It is required to release the handle through `releaseHandle(uint32)`
 
 Parameters:
 - `d` (u32): DataArray handle
@@ -378,6 +379,7 @@ Return value:
 #### `getMap(name string) uint32`
 
 Get a handle to an existing eBPF map.
+It is required to release the handle through `releaseHandle(uint32)`
 
 Parameters:
 - `name` (string): Map's name
@@ -417,6 +419,18 @@ Delete the value corresponding to key in the given map.
 Parameters:
 - `m` (u32): Map handle (as returned by `getMap`)
 - `keyptr` (u64): A `bufPtr` to data corresponding to key.
+
+Return value:
+- 0 in case of success, 1 otherwise.
+
+### Handles
+
+#### `releaseHandle(h uint32) uint32`
+
+Releases the handle
+
+Parameters:
+- `h` (u32): handle
 
 Return value:
 - 0 in case of success, 1 otherwise.

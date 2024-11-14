@@ -59,6 +59,7 @@ func (i *wasmOperatorInstance) addMapFuncs(env wazero.HostModuleBuilder) {
 }
 
 // getMap gets an existing map.
+// releaseHandle must be called when the map is no longer needed.
 // Params:
 // - stack[0] is the name of the map (string encoded)
 // Return value:

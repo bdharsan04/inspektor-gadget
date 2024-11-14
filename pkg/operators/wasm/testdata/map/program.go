@@ -51,6 +51,7 @@ func gadgetStart() int {
 		api.Errorf("%s map exists", mapName)
 		return 1
 	}
+	defer api.ReleaseHandle(m)
 
 	err = m.Put(key, expectedVal)
 	if err != nil {
