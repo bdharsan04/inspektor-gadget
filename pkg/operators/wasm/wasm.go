@@ -35,6 +35,7 @@ import (
 	"github.com/inspektor-gadget/inspektor-gadget/pkg/logger"
 	"github.com/inspektor-gadget/inspektor-gadget/pkg/oci"
 	"github.com/inspektor-gadget/inspektor-gadget/pkg/operators"
+	syscallhelpers "github.com/inspektor-gadget/inspektor-gadget/pkg/gadgets/traceloop/syscall-helpers"
 )
 
 const (
@@ -121,6 +122,8 @@ type wasmOperatorInstance struct {
 
 	createdMap      map[uint32]struct{}
 	createdMapMutex sync.RWMutex
+
+	syscallsDeclarations map[string]syscallhelpers.SyscallDeclaration
 }
 
 func (i *wasmOperatorInstance) Name() string {
@@ -220,6 +223,7 @@ func (i *wasmOperatorInstance) init(
 	i.addParamsFuncs(env)
 	i.addConfigFuncs(env)
 	i.addMapFuncs(env)
+	i.addSyscallsDeclarationsFuncs(env)
 
 	if _, err := env.Instantiate(ctx); err != nil {
 		return fmt.Errorf("instantiating host module: %w", err)
