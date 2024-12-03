@@ -38,6 +38,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	// Import this early to set the environment variable before any other package is imported
+	"github.com/inspektor-gadget/inspektor-gadget/internal/version"
 	_ "github.com/inspektor-gadget/inspektor-gadget/pkg/environment/k8s"
 	instancemanager "github.com/inspektor-gadget/inspektor-gadget/pkg/gadget-service/instance-manager"
 	k8sconfigmapstore "github.com/inspektor-gadget/inspektor-gadget/pkg/gadget-service/store/k8s-configmap-store"
@@ -119,6 +120,8 @@ func init() {
 }
 
 func main() {
+	log.Infof("Inspektor Gadget version: %s", version.Version().String())
+
 	flag.Parse()
 
 	if flag.NArg() > 0 {
