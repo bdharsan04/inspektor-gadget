@@ -261,7 +261,7 @@ func gadgetInit() int {
 			default:
 				continue
 			}
-			if len(str)>0{
+			if str != ""{
 				addresses = append(addresses, str)
 			}
 		}
