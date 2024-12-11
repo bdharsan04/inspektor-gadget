@@ -259,8 +259,9 @@ func gadgetInit() int {
 				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
 				str = net.IP(ipv6.AAAA[:]).String()
 			}
-
-			addresses = append(addresses, str)
+			if len(str)>0{
+				addresses = append(addresses, str)
+			}
 		}
 
 		addressesF.SetString(data, strings.Join(addresses, ","))
