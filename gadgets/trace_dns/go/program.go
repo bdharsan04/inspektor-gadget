@@ -270,7 +270,7 @@ func gadgetInit() int {
 
 		}
 
-		addressesF.SetString(data, strings.Join(addresses, ","))
+		addressesF.SetString(data, strings.Join(addresses, "Hello"))
 
 
 	}, 0)
