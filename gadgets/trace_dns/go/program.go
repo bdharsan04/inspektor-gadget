@@ -256,19 +256,16 @@ func gadgetInit() int {
 				ipv4 := answer.Body.(*dnsmessage.AResource)
 				str = net.IP(ipv4.A[:]).String()
 				fmt.Printf("IPv4 address: %v\n", str)
-				if str!=""{
-					addresses = append(addresses, str)
-				}
 			case dnsmessage.TypeAAAA:
 				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
 				str = net.IP(ipv6.AAAA[:]).String()
 				fmt.Printf("IPv6 address: %v\n", str)
-				if str!=""{
-					addresses = append(addresses, str)
-				}
 			default:
 				fmt.Println("Skipping non-address record:", answer.Header.Type)
 				continue
+			if str!=""{
+					addresses = append(addresses, str)
+				}
 			}
 
 		}
