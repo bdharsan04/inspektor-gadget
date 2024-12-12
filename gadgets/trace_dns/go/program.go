@@ -255,23 +255,28 @@ func gadgetInit() int {
 			case dnsmessage.TypeA:
 				ipv4 := answer.Body.(*dnsmessage.AResource)
 				str = net.IP(ipv4.A[:]).String()
+				fmt.Printf("IPv4 address: %v\n", str)
 				if str!=""{
 					addresses = append(addresses, str)
 				}
 			case dnsmessage.TypeAAAA:
 				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
 				str = net.IP(ipv6.AAAA[:]).String()
+				fmt.Printf("IPv6 address: %v\n", str)
 				if str!=""{
 					addresses = append(addresses, str)
 				}
 			default:
+				fmt.Println("Skipping non-address record:", answer.Header.Type)
 				continue
 			}
 
 		}
 
-		addressesF.SetString(data, strings.Join(addresses, "Hello"))
-
+		fmt.Printf("Addresses to join: %v\n", addresses)
+		joinedAddresses := strings.Join(addresses, "Hello")
+		fmt.Printf("Joined addresses: %s\n", joinedAddresses)
+		addressesF.SetString(data, joinedAddresses)
 
 	}, 0)
 
