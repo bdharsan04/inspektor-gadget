@@ -260,7 +260,6 @@ func gadgetInit() int {
 				str = net.IP(ipv6.AAAA[:]).String()
 			default:
 				fmt.Println("Dharsan")
-				continue
 			}
 			if str!= ""{
 				addresses = append(addresses, str)
