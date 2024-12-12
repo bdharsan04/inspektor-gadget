@@ -258,6 +258,8 @@ func gadgetInit() int {
 			case dnsmessage.TypeAAAA:
 				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
 				str = net.IP(ipv6.AAAA[:]).String()
+			default:
+				continue
 			}
 			if str!= ""{
 				addresses = append(addresses, str)
