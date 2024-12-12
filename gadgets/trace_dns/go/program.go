@@ -248,30 +248,23 @@ func gadgetInit() int {
 		numAnswersF.SetInt32(data, int32(len(msg.Answers)))
 
 		var addresses []string
+
 		for _, answer := range msg.Answers {
 			var str string
 			switch answer.Header.Type {
-				case dnsmessage.TypeA:
-				if ipv4, ok := answer.Body.(*dnsmessage.AResource); ok {
-					str = net.IP(ipv4.A[:]).String()
-				}
-				case dnsmessage.TypeAAAA:
-				if ipv6, ok := answer.Body.(*dnsmessage.AAAAResource); ok {
-					str = net.IP(ipv6.AAAA[:]).String()
-				}
-				case dnsmessage.TypeCNAME:
-				if cname, ok := answer.Body.(*dnsmessage.CNAMEResource); ok {
-					str = cname.CNAME.String()
-				}
-				default:
-				continue
+			case dnsmessage.TypeA:
+				ipv4 := answer.Body.(*dnsmessage.AResource)
+				str = net.IP(ipv4.A[:]).String()
+			case dnsmessage.TypeAAAA:
+				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
+				str = net.IP(ipv6.AAAA[:]).String()
 			}
-			if len(str) > 0 {
-				addresses = append(addresses, str)
-			}
+
+			addresses = append(addresses, str)
 		}
 
-		addressesF.SetString(data, strings.Join(addresses, "*"))
+		addressesF.SetString(data, strings.Join(addresses, ","))
+
 
 	}, 0)
 
