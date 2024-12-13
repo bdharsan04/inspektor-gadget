@@ -259,14 +259,14 @@ func gadgetInit() int {
 				ipv6 := answer.Body.(*dnsmessage.AAAAResource)
 				str = net.IP(ipv6.AAAA[:]).String()
 			default:
-				fmt.Println("Dharsan")
+				continue
 			}
 			if str!= ""{
 				addresses = append(addresses, str)
 			}
 		}
 
-		addressesF.SetString(data, strings.Join(addresses, "Hello"))
+		addressesF.SetString(data, strings.Join(addresses, "*"))
 
 	}, 0)
 
