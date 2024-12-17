@@ -35,14 +35,15 @@ struct file_id {
 };
 
 struct file_stat {
-	struct gadget_process proc;
-	__u64 reads;
-	__u64 rbytes;
-	__u64 writes;
-	__u64 wbytes;
-	char file[PATH_MAX];
-	enum type t_raw;
+    struct gadget_process proc;
+    __u64 reads;
+    struct gadget_bytes rbytes;  // Use gadget_bytes for human-readable representation
+    __u64 writes;
+    struct gadget_bytes wbytes;  // Use gadget_bytes for human-readable representation
+    char file[PATH_MAX];
+    enum type t_raw;
 };
+
 
 #define MAX_ENTRIES 10240
 
