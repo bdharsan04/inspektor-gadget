@@ -76,6 +76,28 @@ typedef __u32 gadget_gauge__u32;
 typedef __u64 gadget_gauge__u64;
 typedef __u32 gadget_histogram_slot__u32;
 typedef __u64 gadget_histogram_slot__u64;
+typedef struct {
+    __u64 raw_bytes; // Store the raw byte value
+    char pretty_str[32]; // Store the human-readable representation (e.g., "1.5 MB")
+} gadget_bytes;
+
+// Function to convert raw bytes to a human-readable format
+void bytes_to_human_readable(__u64 bytes, char *buf) {
+    if (bytes < 1024) {
+        sprintf(buf, "%llu B", bytes);
+    } else if (bytes < 1048576) {
+        sprintf(buf, "%.2f KB", bytes / 1024.0);
+    } else if (bytes < 1073741824) {
+        sprintf(buf, "%.2f MB", bytes / 1048576.0);
+    } else {
+        sprintf(buf, "%.2f GB", bytes / 1073741824.0);
+    }
+}
+
+// This would convert the raw bytes into the human-readable format
+void convert_gadget_bytes(gadget_bytes *gbytes) {
+    bytes_to_human_readable(gbytes->raw_bytes, gbytes->pretty_str);
+}
 
 struct gadget_creds {
 	gadget_uid uid;
