@@ -154,7 +154,6 @@ func (r *Runtime) runGadget(gadgetCtx runtime.GadgetContext, target target, allP
 
 	var controlRequest *api.GadgetControlRequest
 
-	interactive := true
 	if gadgetCtx.UseInstance() {
 		gadgetCtx.Logger().Debugf("attaching to gadget instance %s", gadgetCtx.ImageName())
 		controlRequest = &api.GadgetControlRequest{
@@ -165,7 +164,6 @@ func (r *Runtime) runGadget(gadgetCtx runtime.GadgetContext, target target, allP
 				},
 			},
 		}
-		interactive = false
 	} else {
 		controlRequest = &api.GadgetControlRequest{
 			Event: &api.GadgetControlRequest_RunRequest{
@@ -281,20 +279,20 @@ func (r *Runtime) runGadget(gadgetCtx runtime.GadgetContext, target target, allP
 		gadgetCtx.Logger().Debugf("%-20s | done from server side (%v)", target.node, doneErr)
 		runErr = doneErr
 	case <-gadgetCtx.Context().Done():
-		if interactive {
-			// Send stop request
-			gadgetCtx.Logger().Debugf("%-20s | sending stop request", target.node)
-			controlRequest := &api.GadgetControlRequest{Event: &api.GadgetControlRequest_StopRequest{StopRequest: &api.GadgetStopRequest{}}}
-			runClient.Send(controlRequest)
+		// Send stop request for both interactive and attach modes
+		// For interactive mode: stops the gadget and flushes output
+		// For attach mode: stops the attached instance and flushes output (e.g., for traceloop)
+		gadgetCtx.Logger().Debugf("%-20s | sending stop request", target.node)
+		controlRequest := &api.GadgetControlRequest{Event: &api.GadgetControlRequest_StopRequest{StopRequest: &api.GadgetStopRequest{}}}
+		runClient.Send(controlRequest)
 
-			// Wait for done or timeout
-			select {
-			case doneErr := <-doneChan:
-				gadgetCtx.Logger().Debugf("%-20s | done after cancel request (%v)", target.node, doneErr)
-				runErr = doneErr
-			case <-time.After(ResultTimeout * time.Second):
-				return nil, fmt.Errorf("timed out while getting result")
-			}
+		// Wait for done or timeout
+		select {
+		case doneErr := <-doneChan:
+			gadgetCtx.Logger().Debugf("%-20s | done after cancel request (%v)", target.node, doneErr)
+			runErr = doneErr
+		case <-time.After(ResultTimeout * time.Second):
+			return nil, fmt.Errorf("timed out while getting result")
 		}
 	}
 	return result, runErr
